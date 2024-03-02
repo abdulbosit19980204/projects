@@ -1,0 +1,93 @@
+{% extends 'layouts/master.html' %}
+{% load static %}
+{% block title %}
+Articles
+{% endblock %}
+{% block content %}
+<section class="hero-wrap hero-wrap-2">
+    <div class="container">
+        <div class="row no-gutters slider-text align-items-center justify-content-center">
+            <div class="col-md-9 text-center ftco-animate pt-5">
+                <h1 class="mb-3 bread">Our Blog</h1>
+                <p class="breadcrumbs"><span class="mr-2"><a href="/">Home <i
+                        class="fa fa-chevron-right"></i></a></span> <span>Blog <i
+                        class="fa fa-chevron-right"></i></span></p>
+            </div>
+        </div>
+    </div>
+</section>
+<section class="ftco-section">
+    <div class="container-fluid">
+        <div class="row">
+            {% for article in articles %}
+            <div class="col-md-6 col-lg-4 blog-wrap blog-wrap-2 px-md-5 ftco-animate">
+                <a href="/blog/{{article.id}}" class="img img-blog w-100 border d-block"
+                   style="background-image: url({{ article.article_title_image.url}});">
+
+                </a>
+                <div class="text text-2 py-4 p-0 ftco-animate">
+                    <p class="meta">
+                        <a href="#"><span class="fa fa-calendar mr-2"></span>{{article.created_at}}</a>
+                        <a href="#"><span class="fa fa-user mr-2"></span>Admin</a>
+                        <a href="#" class="meta-chat"><span class="fa fa-comment mr-2"></span>
+                            {{article.view_count}}</a>
+                    </p>
+                    <h2 class="mb-4"><a href="/blog/{{article.id}}">{{article.title}}</a>
+                    </h2>
+                    <div class="icon d-flex align-items-center">
+                        <div class="img" style="background-image: url({{ article.creator_image.url}});">
+                        </div>
+                        <div class="position pl-3">
+                            <h4 class="mb-0">{{article.creator}}</h4>
+                            <span>{{article.creator_title}}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        <div class="row mt-5">
+            <div class="col text-center">
+                <div class="block-27">
+                    <ul>
+                        {% if articles.has_previous %}
+                        <li><a href="?page={{ articles.previous_page_number }}"><</a></li>
+                        {% endif %}
+                        {% for i in articles.paginator.page_range %}
+                        {% if articles.number == i %}
+                        <li class="active"><a href="?page={{i}}">{{i}}</a></li>
+                        {% else %}
+                        <li><a href="?page={{i}}">{{i}}</a></li>
+                        {% endif %}
+                        {% endfor %}
+                        {% if articles.has_next %}
+                        <li><a href="?page={{articles.next_page_number}}">></a></li>
+                        {% endif %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<section class="ftco-intro ftco-section bg-light">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-12 text-center">
+                <h2>Subscribe to our Newsletter</h2>
+                <div class="row justify-content-center">
+                    <div class="col-md-5">
+                        <form action="#" class="subscribe-form">
+                            <div class="form-group d-flex">
+                                <input type="text" class="form-control" placeholder="Enter email address">
+                                <input type="submit" value="Subscribe" class="submit px-3">
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+</section>
+
+{% endblock %}
