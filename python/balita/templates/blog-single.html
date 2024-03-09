@@ -1,0 +1,125 @@
+{% extends 'layouts/master.html' %}
+{% load static %}
+{% block title %}
+Article
+{% endblock %}
+
+
+{% block content %}
+<div class="col-md-12 col-lg-8 main-content">
+    <h1 class="mb-4">{{detail.title}}</h1>
+    <div class="post-meta">
+        <span class="category">{{detail.category}}</span>
+        <span class="mr-2">{{detail.created_at}} </span> &bullet;
+        <span class="ml-2"><span class="fa fa-comments"></span> {{detail.comments_set.count}}</span>
+    </div>
+    <div class="post-content-body">
+        <p>{{detail.description | safe}}</p>
+    </div>
+    <div class="pt-5">
+        <p>
+            Categories:<a href="#">{{detail.category}}</a>
+            Tags:
+            {% for tag in detail.tags.all %}
+            <a href="/categories/?tag={{tag.id}}">#{{ tag }}</a>
+            {% endfor %}
+        </p>
+    </div>
+    <div class="pt-5">
+        <h3 class="mb-5">{{len_comment}} Comments</h3>
+        <ul class="comment-list">
+            {% for comment in comments %}
+            <li class="comment">
+                <div class="vcard">
+                    <img src="{% static 'images/person_1.jpg' %}" alt="Image placeholder">
+                </div>
+                <div class="comment-body">
+                    <h3>{{comment.name}}</h3>
+                    <div class="meta">{{comment.created_at}}</div>
+                    <p>{{comment.comment}}</p>
+                    <p><a href="#" class="reply">Reply</a></p>
+                </div>
+            </li>
+            {% endfor %}
+        </ul>
+
+        <div class="comment-form-wrap pt-5">
+            <h3 class="mb-5">Leave a comment</h3>
+            <form action="#" class="p-5 bg-light" method="POST">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="name">Name *</label>
+                    <input name="name" type="text" class="form-control" id="name">
+                </div>
+                <div class="form-group">
+                    <label for="email">Email *</label>
+                    <input name="email" type="email" class="form-control" id="email">
+                </div>
+                <div class="form-group">
+                    <label for="telegram">Telegram</label>
+                    <input name="telegram" type="text" class="form-control" id="telegram">
+                </div>
+                <div class="form-group">
+                    <label for="message">Message</label>
+                    <textarea name="comment" id="message" cols="30" rows="10" class="form-control"></textarea>
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Post Comment" class="btn btn-primary">
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block related_article %}
+<section class="py-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <h2 class="mb-3 ">Related Post</h2>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6 col-lg-4">
+                <a href="#" class="a-block d-flex align-items-center height-md"
+                   style="background-image: url('{% static 'images/img_2.jpg' %}'); ">
+                    <div class="text">
+                        <div class="post-meta">
+                            <span class="category">Lifestyle</span>
+                            <span class="mr-2">March 15, 2018 </span> &bullet;
+                            <span class="ml-2"><span class="fa fa-comments"></span> 3</span>
+                        </div>
+                        <h3>There’s a Cool New Way for Men to Wear Socks and Sandals</h3>
+                    </div>
+                </a>
+            </div>
+            <div class="col-md-6 col-lg-4">
+                <a href="#" class="a-block d-flex align-items-center height-md"
+                   style="background-image: url('{% static 'images/img_3.jpg' %}'); ">
+                    <div class="text">
+                        <div class="post-meta">
+                            <span class="category">Travel</span>
+                            <span class="mr-2">March 15, 2018 </span> &bullet;
+                            <span class="ml-2"><span class="fa fa-comments"></span> 3</span>
+                        </div>
+                        <h3>There’s a Cool New Way for Men to Wear Socks and Sandals</h3>
+                    </div>
+                </a>
+            </div>
+            <div class="col-md-6 col-lg-4">
+                <a href="#" class="a-block d-flex align-items-center height-md"
+                   style="background-image: url('{% static 'images/img_4.jpg' %}'); ">
+                    <div class="text">
+                        <div class="post-meta">
+                            <span class="category">Food</span>
+                            <span class="mr-2">March 15, 2018 </span> &bullet;
+                            <span class="ml-2"><span class="fa fa-comments"></span> 3</span>
+                        </div>
+                        <h3>There’s a Cool New Way for Men to Wear Socks and Sandals</h3>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
