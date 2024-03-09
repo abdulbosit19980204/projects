@@ -1,0 +1,133 @@
+{% extends "layouts/master.html" %}
+{% load static %}
+{% block title %}
+Home page
+{% endblock %}
+
+
+{% block slider %}
+<div class="row">
+    <div class="col-md-12">
+        <div class="owl-carousel owl-theme home-slider">
+            {% for article in slider_article %}
+            <div>
+                <a href="/category/{{article.id}}" class="a-block d-flex align-items-center height-lg"
+                   style="background-image: url({{article.image.url}}); ">
+                    <div class="text half-to-full">
+                        <div class="post-meta">
+                            <span class="category ">{{article.category}}</span>
+                            <span class="mr-2">{{article.created_at}} </span> &bullet;
+                            <span class="ml-2"><span
+                                    class="fa fa-comments"></span> {{article.comments_set.count}}</span>
+                        </div>
+                        <h3>{{article.title}}</h3>
+                        <p>{{article.sub_title|slice:":100"}}...</p>
+                    </div>
+                </a>
+            </div>
+            {% endfor %}
+
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block popular_content%}
+<div class="row">
+    {% for article in popular_article %}
+    <div class="col-md-6 col-lg-4">
+        <a href="/category/{{article.id}}" class="a-block d-flex align-items-center height-md"
+           style="background-image: url({{article.image.url}}); ">
+            <div class="text">
+                <div class="post-meta">
+                    <span class="category">{{article.category}}</span>
+                    <span class="mr-2">{{article.created_at}} </span> &bullet;
+                    <span class="ml-2"><span class="fa fa-comments"></span> {{article.comments_set.count}}</span>
+                </div>
+                <h3>{{article.title}}</h3>
+            </div>
+        </a>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}
+{% block mainpage_categories_title %}
+<div class="row">
+    <div class="col-md-6">
+        <h2 class="mb-4">Lifestyle Category</h2>
+    </div>
+</div>
+{% endblock %}
+{% block content %}
+<div class="col-md-12 col-lg-8 main-content">
+    <div class="row">
+        {% for article in articles %}
+        <div class="col-md-6">
+            <a href="/category/{{article.id}}" class="blog-entry element-animate" data-animate-effect="fadeIn">
+                <img src="{{article.image.url}}" alt="Image placeholder">
+                <div class="blog-content-body">
+                    <div class="post-meta">
+                        <span class="category">{{article.category}}</span>
+                        <span class="mr-2">{{article.updated_at}} </span> &bullet;
+                        <span class="ml-2"><span class="fa fa-comments"></span> {{article.comments_set.count}}</span>
+                    </div>
+                    <h2>{{article.title}}</h2>
+                </div>
+            </a>
+        </div>
+        {% endfor %}
+    </div>
+    <div class="row">
+        <div class="col-md-12 text-center">
+            <nav aria-label="Page navigation" class="text-center">
+                <ul class="pagination">
+                    {% if articles.has_previous %}
+                    <li class="page-item"><a class="page-link" href="?page={{articles.previous_page_number}}">Prev</a>
+                    </li>
+                    {% else %}
+                    <li class="page-item"><a class="page-link">Prev</a></li>
+                    {% endif %}
+                    {% for i in articles.paginator.page_range %}
+                    {% if articles.number == i %}
+                    <li class="page-item active"><a class="page-link" href="?page={{i}}">{{i}}</a></li>
+                    {% else %}
+                    <li class="page-item"><a class="page-link" href="?page={{i}}">{{i}}</a></li>
+                    {% endif %}
+                    {% endfor %}
+                    {% if articles.has_next %}
+                    <li class="page-item"><a class="page-link" href="?page={{articles.next_page_number}}">Next</a></li>
+                    {% else %}
+                    <li class="page-item"><a class="page-link">Next</a></li>
+                    {% endif %}
+                </ul>
+            </nav>
+        </div>
+    </div>
+    <div class="row mb-5 mt-5">
+        <div class="col-md-12">
+            <h2 class="mb-4">More Blog Posts</h2>
+        </div>
+        <div class="col-md-12">
+            {% for post in more_blog_posts %}
+            <div class="post-entry-horzontal">
+                <a href="/category/{{post.id}}">
+                    <div class="image element-animate" data-animate-effect="fadeIn"
+                         style="background-image: url({{post.image.url}});"></div>
+                    <span class="text">
+<div class="post-meta">
+<span class="category">{{post.category}}</span>
+<span class="mr-2">{{post.created_at}} </span> &bullet;
+<span class="ml-2"><span class="fa fa-comments"></span> {{post.comments_set.count}}</span>
+</div>
+<h2>{{post.title}}</h2>
+</span>
+                </a>
+            </div>
+
+            {% endfor %}
+
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+
