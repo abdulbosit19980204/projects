@@ -40,8 +40,10 @@
                   <i class="fa fa-home" style="color: #48dbfb;" aria-hidden="true"></i>
             </a></b></span>
             <span style="color: white; font-size: 27px;"><b>{{post_count}} Post</b></span>
-            <span style="color: white; font-size: 27px;"><b>{{follower_count}} followers</b></span>
-            <span style="color: white; font-size: 27px;"><b>{{following_count}} following</b></span>
+            <span style="color: white; font-size: 27px;"
+                  onclick="window.location = '/follower?follower_uid={{user.id}}'"><b>{{follower_count}} followers</b></span>
+            <span style="color: white; font-size: 27px;"
+                  onclick="window.location = '/follower?following_uid={{user.id}}'"><b>{{following_count}} following</b></span>
             {% if actual_user %}
             <a> Follow</a>
             {% else %}
@@ -67,7 +69,7 @@
                 <div class="col-lg-2 col-sm-3">
                     <div class="user-avatar">
                         <figure>
-                            <img src="{{user.user_image.url}}"
+                            <img onclick="window.location = '/'" src="{{user.user_image.url}}"
                                  style="height: 250px; width: 100%; " alt="">
                             {% if actual_user %}
                             <form class="edit-phto" method="post" action="/profile/image/"

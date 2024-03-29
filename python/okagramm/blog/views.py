@@ -16,7 +16,8 @@ def home_view(request):
     posts = Post.objects.all()[::-1]
     comments = CommentPost.objects.all()
     user = MyUser.objects.filter(user=request.user).first()
-    users = MyUser.objects.exclude(user=request.user)
+    users = MyUser.objects.exclude(user=request.user).exclude(followmyuser__follower__user=request.user)
+
     notifications = Notification.objects.filter(is_read=False)
     likes = LikePost.objects.all()
     d = {
@@ -91,21 +92,27 @@ def post_comment_view(requsts):
         message = "Postingizga fikr bildirildi"
         notification = Notification.objects.create(user=post.author, message=message, reporter_user=author, post=post)
         notification.save()
+        rf = requests.get('http://127.0.0.1:8000/media/{}'.format(post.post_image))
+        file = {"photo": post.post_image}
         TEXT = """
+        
                 Name: {} 
                 Lastname: {} 
                 Email: {} 
                 -------------------------
                 {} {} postiga fikir bildirdi 
-                korish: http://127.0.0.1:8000/#{{}}
-                ---------------
+                -------------------------------
+                Comment: {}
+                -------------------------------
+                korish: http://127.0.0.1:8000/%23{}
+                -------------------------------
 
                 """.format(author.user.first_name, author.user.last_name, author.user.email,
                            post.author.user.first_name,
-                           post.author.user.last_name, post_id)
+                           post.author.user.last_name, data['message'], post_id)
 
-        url = f'https://api.telegram.org/bot{BOT_TOKEN}/sendMessage?chat_id={CHAT_ID}&text={TEXT}'
-        response = requests.get(url)
+        url = f'https://api.telegram.org/bot{BOT_TOKEN}/sendPhoto?chat_id={CHAT_ID}&caption={TEXT}'
+        response = requests.post(url, files=file)
         return redirect('/#{}'.format(post_id))
     return render(requsts, 'index.html')
 
@@ -183,6 +190,47 @@ def following_view(request):
     return redirect('/')
 
 
+def follower_view(request):
+    # uid = request.GET.get('uid')
+    follower_uid = request.GET.get('follower_uid', None)
+    following_uid = request.GET.get('following_uid', None)
+    print("following_uid", following_uid, "follower_uid", follower_uid)
+    if follower_uid is not None:
+        follower = FollowMyUser.objects.filter(following__id=follower_uid)
+        followed = []
+        title = "Your Followers"
+        unfollow = False
+        for i in MyUser.objects.all():
+            print(type(i))
+            for j in follower:
+                print(type(j))
+                if j.follower == i:
+                    followed.append(i)
+
+    elif following_uid is not None:
+        follower = FollowMyUser.objects.filter(follower__id=following_uid)
+        title = "Your are Following"
+        unfollow = True
+        followed = []
+        for i in MyUser.objects.all():
+            print(type(i))
+            for j in follower:
+                print(type(j))
+                if j.following == i:
+                    followed.append(i)
+    print("follower", followed)
+    my_user = MyUser.objects.filter(user=request.user).first()
+    followers = FollowMyUser.objects.filter(following=my_user)
+    d = {
+        "users": followed,
+        "user": my_user,
+        "searched": True,
+        "title": title,
+        "unfollow": unfollow
+    }
+    return render(request, 'searched.html', context=d)
+
+
 def searched_view(request):
     d = {}
     if request.method == "POST":
@@ -203,6 +251,7 @@ def searched_view(request):
         "users": users,
         "user": my_user,
         "searched": True,
+        "title": "Users You Searched",
     }
     return render(request, 'searched.html', context=d)
 
@@ -220,3 +269,11 @@ def notification_read_view(request):
         # notification.save(update_fields=['is_read'])
         notification.delete()
         return redirect('/#{}'.format(notification.post.id))
+
+
+def notification_mark_read_view(request):
+    user = MyUser.objects.filter(user=request.user).first()
+    notifications = Notification.objects.filter(user=user)
+    notifications.delete()
+
+    return redirect('/')
