@@ -30,10 +30,14 @@
                         </a>
                     </li>
                     <li>
-                        <a href="#"
-                           class="flex items-center px-3 py-2 hover:bg-gray-200 hover:text-gray-800 rounded-md ">
-                            <i class="uil-favorite mr-1"></i> Add favorites
-                        </a>
+                        <form method="post" action="/favorite/"
+                              class="flex items-center px-3 py-2 hover:bg-gray-200 hover:text-gray-800 rounded-md ">
+                            {% csrf_token %}
+                            <input name="pid" value="{{post.id}}" hidden="hidden">
+                            <button type="submit">
+                                <i class="uil-favorite mr-1"></i> Add favorites
+                            </button>
+                        </form>
                     </li>
                     {% if user.user.id == author.user.id %}
                     <li>

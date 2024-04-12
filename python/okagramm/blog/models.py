@@ -62,6 +62,18 @@ class LikePost(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
 
+class FavoritePost(models.Model):
+    user = models.ForeignKey(MyUser, on_delete=models.CASCADE)
+    post = models.ForeignKey(Post, on_delete=models.CASCADE)
+    favorited = models.BooleanField(default=False)
+    favorited_title = models.TextField(max_length=15, default="Add Favorite")
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.user.user.username
+
+
 class FollowMyUser(models.Model):
     follower = models.ForeignKey(MyUser, related_name='follower_user', on_delete=models.CASCADE)
     following = models.ForeignKey(MyUser, on_delete=models.CASCADE)

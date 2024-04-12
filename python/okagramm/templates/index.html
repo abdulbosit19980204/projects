@@ -184,21 +184,26 @@
             <div uk-drop="mode: click;offset: 4" class="header_dropdown">
                 <h4
                         class="-mt-5 -mx-5 bg-gradient-to-t from-gray-100 to-gray-50 border-b font-bold px-6 py-3">
-                    Messages </h4>
+                    Favorites </h4>
                 <ul class="dropdown_scrollbar" data-simplebar>
+                    {% for post in favourited_posts%}
+                    {% if user.user.id == post.user.user.id %}
                     <li>
-                        <a href="#">
-                            <div class="drop_avatar"><img src="{% static 'assets/images/avatars/avatar-1.jpg' %}"
-                                                          alt="">
+                        <a href="/#{{post.post.id}}">
+                            <div class="drop_avatar">
+                                <img src="{{ post.post.author.user_image.url }}" alt="">
                             </div>
                             <div class="drop_content">
-                                <strong> Taiye </strong>
-                                <time> 6:43 PM</time>
-                                <p> hi tomi </p>
+                                <strong> {{post.post.author.user.first_name}}
+                                </strong>
+<!--                                <time> {{post.created_at|date:"d M Y"}}</time>-->
+                                <p>@{{post.post.author.user.username|lower}} </p>
                             </div>
+                            <img style="width: 30%" src="{{ post.post.post_image.url }}" alt="">
                         </a>
                     </li>
-
+                    {% endif %}
+                    {% endfor %}
 
                 </ul>
                 <a href="#" class="see-all">See all</a>

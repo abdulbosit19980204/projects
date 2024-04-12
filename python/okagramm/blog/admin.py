@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import MyUser, FollowMyUser, Post, CommentPost, LikePost, Notification
+from .models import MyUser, FollowMyUser, Post, CommentPost, LikePost, Notification, FavoritePost
 from django.utils.html import format_html
 
 
@@ -35,8 +35,9 @@ class CommentPostAdmin(admin.ModelAdmin):
 
     image_tag.short_description = 'Image'
     list_display = ('id', 'image_tag', 'message', 'author', "created_at")
-    list_display_links = ('id', 'image_tag', 'message', 'author', )
+    list_display_links = ('id', 'image_tag', 'message', 'author',)
 
 
 admin.site.register(LikePost)
 admin.site.register(Notification)
+admin.site.register(FavoritePost)

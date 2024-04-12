@@ -1,13 +1,19 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
-from .models import Post, LikePost, CommentPost, MyUser, FollowMyUser, Notification
+from .models import Post, LikePost, CommentPost, MyUser, FollowMyUser, Notification, FavoritePost
 from django.db.models import Q
 
 import requests
 
 BOT_TOKEN = '6189703946:AAGb1TA2yDg-sdu0c_AIDn39_07AuzvlZgE'
 CHAT_ID = '1209619850'
+
+
+def filter_favourites(user, posts):
+    for post in posts:
+        if post.user == user.user.user_id:
+            return post
 
 
 # Create your views here.
@@ -17,6 +23,8 @@ def home_view(request):
     comments = CommentPost.objects.all()
     user = MyUser.objects.filter(user=request.user).first()
     users = MyUser.objects.exclude(user=request.user).exclude(followmyuser__follower__user=request.user)
+    # favorited_posts = list(map(filter_favourites, FavoritePost.objects.all(), user))
+    favourited_posts = FavoritePost.objects.all()
 
     notifications = Notification.objects.filter(is_read=False)
     likes = LikePost.objects.all()
@@ -28,6 +36,7 @@ def home_view(request):
         "likes": likes,
         "searched": False,
         "notifications": notifications,
+        "favourited_posts": favourited_posts,
     }
     return render(request, 'index.html', context=d)
 
@@ -277,3 +286,19 @@ def notification_mark_read_view(request):
     notifications.delete()
 
     return redirect('/')
+
+
+def add_favorite_view(request):
+    if request.method == "POST":
+        pid = request.POST.get('pid')
+        post = Post.objects.filter(id=pid).first()
+        user = MyUser.objects.filter(user=request.user).first()
+        favorite = FavoritePost.objects.filter(post=post, user=user).first()
+        if not favorite:
+            favorited = FavoritePost.objects.create(user=user, post=post, favorited=True, )
+            favorited.save()
+        else:
+            favorite.delete()
+        return redirect('/#{}'.format(pid))
+    else:
+        return redirect('/')
