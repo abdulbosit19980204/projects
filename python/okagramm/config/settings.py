@@ -22,9 +22,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-i=yzvg^z%x8)v8t*u7%4$zpqkp7i%z!l@nu=5p5vpz6ey^@#d$'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = ['*', 'https://projects-95kr.onrender.com', 'okagram.yacdem.uz']
+ALLOWED_HOSTS = [
+    '*',
+    'https://projects-95kr.onrender.com',
+    'https://okagram.yacdem.uz'
+]
 
 # Application definition
 
