@@ -147,23 +147,24 @@
                     Notification </h4>
                 <ul class="dropdown_scrollbar" data-simplebar>
                     {% for notification in notifications %}
-                    {% if user.user.id == notification.user.user.id %}
-                    <li>
+                        {% if user.user.id == notification.user.user.id %}
+                            <li>
 
-                        <a href="/notification?notification_id={{notification.id}}">
-                            <div class="drop_avatar"><img src="{{notification.reporter_user.user_image.url}}"
-                                                          alt="">
-                            </div>
-                            <div class="drop_content">
-                                <p><strong class="text-link">{{notification.reporter_user.user.first_name}}</strong>
-                                    <span class="text-link"> {{notification.message}}  </span>
-                                </p>
-                                <span class="time-ago"> {{notification.created_at}} </span>
-                            </div>
+                                <a href="/notification?notification_id={{ notification.id }}">
+                                    <div class="drop_avatar"><img src="{{ notification.reporter_user.user_image.url }}"
+                                                                  alt="">
+                                    </div>
+                                    <div class="drop_content">
+                                        <p><strong
+                                                class="text-link">{{ notification.reporter_user.user.first_name }}</strong>
+                                            <span class="text-link"> {{ notification.message }}  </span>
+                                        </p>
+                                        <span class="time-ago"> {{ notification.created_at }} </span>
+                                    </div>
 
-                        </a>
-                    </li>
-                    {% endif %}
+                                </a>
+                            </li>
+                        {% endif %}
                     {% endfor %}
 
 
@@ -186,23 +187,23 @@
                         class="-mt-5 -mx-5 bg-gradient-to-t from-gray-100 to-gray-50 border-b font-bold px-6 py-3">
                     Favorites </h4>
                 <ul class="dropdown_scrollbar" data-simplebar>
-                    {% for post in favourited_posts%}
-                    {% if user.user.id == post.user.user.id %}
-                    <li>
-                        <a href="/#{{post.post.id}}">
-                            <div class="drop_avatar">
-                                <img src="{{ post.post.author.user_image.url }}" alt="">
-                            </div>
-                            <div class="drop_content">
-                                <strong> {{post.post.author.user.first_name}}
-                                </strong>
-<!--                                <time> {{post.created_at|date:"d M Y"}}</time>-->
-                                <p>@{{post.post.author.user.username|lower}} </p>
-                            </div>
-                            <img style="width: 30%" src="{{ post.post.post_image.url }}" alt="">
-                        </a>
-                    </li>
-                    {% endif %}
+                    {% for post in favourited_posts %}
+                        {% if user.user.id == post.user.user.id %}
+                            <li>
+                                <a href="/#{{ post.post.id }}">
+                                    <div class="drop_avatar">
+                                        <img src="{{ post.post.author.user_image.url }}" alt="">
+                                    </div>
+                                    <div class="drop_content">
+                                        <strong> {{ post.post.author.user.first_name }}
+                                        </strong>
+                                        <!--                                <time> {{post.created_at|date:"d M Y"}}</time>-->
+                                        <p>@{{ post.post.author.user.username|lower }} </p>
+                                    </div>
+                                    <img style="width: 30%" src="{{ post.post.post_image.url }}" alt="">
+                                </a>
+                            </li>
+                        {% endif %}
                     {% endfor %}
 
                 </ul>
@@ -212,7 +213,7 @@
             <!-- profile -->
 
             <a href="#">
-                <img src="{{user.user_image.url}}" class="header-avatar" alt="">
+                <img src="{{ user.user_image.url }}" class="header-avatar" alt="">
             </a>
             <div uk-drop="mode: click;offset:9" class="header_dropdown profile_dropdown border-t">
                 <ul>
@@ -238,11 +239,10 @@
 
             <!-- post 1-->
             {% for post in posts %}
-            {% include 'layouts/post1.html' with image=post.post_image author=post.author %}
+                {% include 'layouts/post1.html' with image=post.post_image author=post.author %}
             {% endfor %}
             <!-- post 2-->
             {% include 'layouts/post_many_image.html' %}
-
 
             <!-- Load more-->
             <div class="flex justify-center mt-6" id="toggle" uk-toggle="target: #toggle ;animation: uk-animation-fade">

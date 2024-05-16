@@ -19,7 +19,12 @@ def filter_favourites(user, posts):
 # Create your views here.
 @login_required(login_url='auth/signin')
 def home_view(request):
-    posts = Post.objects.all()[::-1]
+    follower = MyUser.objects.filter(user_id=request.user.id).first()
+    following = FollowMyUser.objects.filter(follower=follower).values('following_id')
+    # print(following)
+
+    # posts = Post.objects.all()[::-1]
+    posts = Post.objects.filter(author__in=following)[::-1]
     comments = CommentPost.objects.all()
     user = MyUser.objects.filter(user=request.user).first()
     users = MyUser.objects.exclude(user=request.user).exclude(followmyuser__follower__user=request.user)
