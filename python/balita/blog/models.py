@@ -1,6 +1,6 @@
 from django.db import models
 from ckeditor.fields import RichTextField
-
+from django_ckeditor_5.fields import CKEditor5Field
 
 # Create your models here.
 
@@ -28,7 +28,7 @@ class Article(models.Model):
     title = models.CharField(max_length=255)
     sub_title = models.TextField(blank=True, null=True)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
-    description = RichTextField()
+    description = CKEditor5Field('Text', config_name='extends')
     image = models.ImageField(upload_to='articles/')
     tags = models.ManyToManyField(Tag, blank=True, null=True)
     is_published = models.BooleanField(default=True)
@@ -52,7 +52,7 @@ class Comments(models.Model):
     name = models.CharField(max_length=255)
     email = models.EmailField()
     telegram = models.CharField(max_length=255, blank=True, null=True)
-    comment = RichTextField()
+    comment =  CKEditor5Field('Text', config_name='extends')
     is_visiable = models.BooleanField(default=True)
 
     created_at = models.DateTimeField(auto_now_add=True)
